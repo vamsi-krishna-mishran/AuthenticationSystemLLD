@@ -20,6 +20,7 @@ namespace BlogSystem.Controllers
         [HttpPost("register")]
         public async Task<IActionResult> Post(User user)
         {
+            
             bool result=await _repo.register(user);
             if (result)
             {

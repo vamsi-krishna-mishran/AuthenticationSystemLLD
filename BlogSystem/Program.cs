@@ -34,7 +34,7 @@ namespace BlogSystem
             }
 
             app.UseHttpsRedirection();
-
+            app.UseHeaderUpdateMiddleware();
             app.UseAuthorization();
 
 

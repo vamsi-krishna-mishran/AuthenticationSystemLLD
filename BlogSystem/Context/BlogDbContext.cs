@@ -1,5 +1,6 @@
 ﻿using BlogSystem.Models;
 using Microsoft.EntityFrameworkCore;
+using System;
 
 namespace BlogSystem.Context
 {
@@ -17,7 +18,9 @@ namespace BlogSystem.Context
 
             var folder = Environment.SpecialFolder.LocalApplicationData;
             var path = Environment.GetFolderPath(folder);
-            DbPath = System.IO.Path.Join(path, "blogging.db");
+            //DbPath = System.IO.Path.Join(path, "blogging.db");
+            string curDir = System.IO.Directory.GetCurrentDirectory();
+            DbPath = System.IO.Path.Join(curDir, "Database", "blogging.db");
         }
 
         /*protected override void OnConfiguring(DbContextOptionsBuilder options)
