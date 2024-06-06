@@ -13,7 +13,7 @@ public class HeaderUpdateMiddleware
     public async Task InvokeAsync(HttpContext httpContext)
     {
         //svc.Write(DateTime.Now.Ticks.ToString());
-        httpContext.Request.Headers.Add("Authorization", "Bearer " + httpContext.Request.Cookies["Bearer"]);
+        httpContext.Request.Headers.Add("Authorization",  "Bearer "+httpContext.Request.Cookies["token"]);
         string token = httpContext.Request.Headers["Authorization"].ToString();
         Console.WriteLine("called");
         await _next(httpContext);

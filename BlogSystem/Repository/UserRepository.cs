@@ -9,7 +9,7 @@ namespace BlogSystem.Repository
     {
         public Task<bool> register(User user);
 
-        public Task<bool> login(string username, string password);
+        public Task<User> login(string username, string password);
 
         public Task<bool> logout();
 
@@ -24,22 +24,18 @@ namespace BlogSystem.Repository
             _context = context;
         }
 
-        public async Task<bool> login(string username, string password)
+        public async Task<User> login(string username, string password)
         {
             try
             {
                 var allUsers = await _context.users.ToListAsync();
                 var result = await _context.users.Where(user => user.userName == username && user.password == password).FirstOrDefaultAsync();
-                if (result == null)
-                {
-                    return false;
-                }
-                return true;
+                return result;
 
             }
             catch (Exception ex)
             {
-                return false;
+                return null;
             }
         }
 
