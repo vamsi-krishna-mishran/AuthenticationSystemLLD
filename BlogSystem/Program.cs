@@ -12,7 +12,7 @@ namespace BlogSystem
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
-
+            var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
 
 
 
@@ -36,6 +36,18 @@ namespace BlogSystem
                      IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtKey))
                  };
              });
+
+            builder.Services.AddCors(options =>
+            {
+                options.AddPolicy(name: MyAllowSpecificOrigins,
+                                  policy =>
+                                  {
+                                      policy.AllowAnyOrigin()
+                                      .AllowAnyOrigin()
+                                      .AllowAnyMethod();
+                                      
+                                  });
+            });
             // Add services to the container.
 
             builder.Services.AddControllers();
@@ -53,7 +65,7 @@ namespace BlogSystem
                 context.Database.EnsureCreated();
             }
             // Configure the HTTP request pipeline.
-            if (app.Environment.IsDevelopment())
+            if (!app.Environment.IsDevelopment())
             {
                 app.UseSwagger();
                 app.UseSwaggerUI();
@@ -61,6 +73,8 @@ namespace BlogSystem
 
             app.UseHttpsRedirection();
             app.UseHeaderUpdateMiddleware();
+
+            app.UseCors(MyAllowSpecificOrigins);
             app.UseAuthentication();
             app.UseAuthorization();
 

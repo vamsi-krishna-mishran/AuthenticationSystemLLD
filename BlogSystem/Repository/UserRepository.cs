@@ -61,7 +61,7 @@ namespace BlogSystem.Repository
         {
             try
             {
-                var result = await _context.users.Where(user => user.userName == username && user.password == newPassword).FirstOrDefaultAsync();
+                var result = await _context.users.Where(user => user.userName == username && user.password == password).FirstOrDefaultAsync();
                 if (result != null)
                 {
                     result.password = newPassword;

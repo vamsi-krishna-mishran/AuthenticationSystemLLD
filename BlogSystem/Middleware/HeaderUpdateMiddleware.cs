@@ -13,10 +13,22 @@ public class HeaderUpdateMiddleware
     public async Task InvokeAsync(HttpContext httpContext)
     {
         //svc.Write(DateTime.Now.Ticks.ToString());
-        httpContext.Request.Headers.Add("Authorization",  "Bearer "+httpContext.Request.Cookies["token"]);
-        string token = httpContext.Request.Headers["Authorization"].ToString();
-        Console.WriteLine("called");
-        await _next(httpContext);
+        try
+        {
+            httpContext.Request.Headers.Add("Authorization", "Bearer " + httpContext.Request.Cookies["token"]);
+            string token = httpContext.Request.Headers["Authorization"].ToString();
+            Console.WriteLine("called");
+            await _next(httpContext);
+        }
+        catch(Exception ex)
+        {
+            httpContext.Response.StatusCode = 401;
+            httpContext.Response.ContentType = "text/plain";   //add this line.....
+
+            await httpContext.Response.WriteAsync("login first");
+            return;
+        }
+        
     }
 }
 

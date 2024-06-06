@@ -8,9 +8,9 @@ namespace BlogSystem.Repository
     {
         public Task<List<Blog>> getBlogs();
 
-        public Task<bool> addBlog(Blog blog);
+        public Task<Blog> addBlog(Blog blog);
 
-        public Task<bool> removeBlog(Blog blog);
+        public Task<bool> removeBlog(int blogid);
 
         public Task<bool> rateBlog(Blog blog, Rating rating);
 
@@ -24,16 +24,17 @@ namespace BlogSystem.Repository
         {
             _context = context;
         }
-        public async Task<bool> addBlog(Blog blog)
+        public async Task<Blog> addBlog(Blog blog)
         {
             try
             {
-                await _context.blog.AddAsync(blog);
-                return true;
+                var res=await _context.blog.AddAsync(blog);
+                await _context.SaveChangesAsync();
+                return res.Entity;
             }
             catch (Exception ex)
             {
-                return false;
+                return null;
             }
         }
 
@@ -68,13 +69,14 @@ namespace BlogSystem.Repository
             }
         }
 
-        public async Task<bool> removeBlog(Blog blog)
+        public async Task<bool> removeBlog(int blogid)
         {
             try
             {
-                if (await _context.blog.FindAsync(blog) != null)
+                var result = await _context.blog.FindAsync(blogid);
+                if (result != null)
                 {
-                    _context.blog.Remove(blog);
+                    _context.blog.Remove(result);
                     await _context.SaveChangesAsync();
                     return true;
                 }

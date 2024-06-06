@@ -2,8 +2,8 @@
 using BlogSystem.Models;
 using BlogSystem.Repository;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace BlogSystem.Controllers
 {
@@ -14,10 +14,12 @@ namespace BlogSystem.Controllers
         private IUserRepository _repo;
         private IConfiguration _config;
 
-        public UserController(IUserRepository repo,IConfiguration config)
+        private IBlogRepository _brepo;
+        public UserController(IUserRepository repo,IConfiguration config, IBlogRepository brepo)
         {
             _repo = repo;
             _config = config;
+            _brepo = brepo;
         }
 
 
@@ -25,13 +27,19 @@ namespace BlogSystem.Controllers
         [HttpPost("register")]
         public async Task<IActionResult> Post(User user)
         {
-            
-            bool result=await _repo.register(user);
-            if (result)
+            try
             {
-                return Ok($"{user}");
+                bool result = await _repo.register(user);
+                if (result)
+                {
+                    return Ok($"{user}");
+                }
+                return StatusCode(400, "registration Failed");
             }
-            return StatusCode(400, "registration Failed");
+            catch(Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
         [AllowAnonymous]
         [HttpPost("login")]
@@ -61,6 +69,10 @@ namespace BlogSystem.Controllers
         [HttpGet("resource1")]
         public  IActionResult Get2()
         {
+            var user = HttpContext.User;
+            var role = user.FindFirstValue(ClaimTypes.Name);
+            var name = user.FindFirstValue(ClaimTypes.Role);
+            
             return Ok("got the resource1");
         }
 
@@ -69,6 +81,49 @@ namespace BlogSystem.Controllers
         public IActionResult Get3()
         {
             return Ok("got the resource2");
+        }
+
+        [HttpGet("resetPassword")]
+        public async Task<IActionResult> reset(string uname,string pwd,string newpwd)
+        {
+            try
+            {
+                bool res = await _repo.resetPassword(uname, pwd, newpwd);
+                if (res)
+                {
+                    return Ok($"new password is {newpwd}");
+                }
+                return BadRequest("Invalid credentials.");
+            }
+            catch(Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [Authorize]
+        [HttpPost("rateblog")]
+        public async Task<IActionResult> rate([FromBody] Blog blog,[FromQuery]int rating)
+        {
+            try
+            {
+                Rating r = new Rating();
+                r.rating = rating;
+                var res=await _brepo.rateBlog(blog,r);
+                if (res) return Ok("rated");
+                return BadRequest("failed to rate");
+            }
+            catch(Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+        [Authorize]
+        [HttpGet("logout")]
+        public async Task<IActionResult> logout()
+        {
+            Response.Cookies.Delete("token");
+            return Ok("removed cookie");
         }
     }
 }

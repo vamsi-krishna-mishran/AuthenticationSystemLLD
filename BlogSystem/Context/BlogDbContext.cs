@@ -20,6 +20,8 @@ namespace BlogSystem.Context
             var path = Environment.GetFolderPath(folder);
             //DbPath = System.IO.Path.Join(path, "blogging.db");
             string curDir = System.IO.Directory.GetCurrentDirectory();
+            Console.WriteLine(curDir);
+            System.IO.Directory.CreateDirectory("Database");
             DbPath = System.IO.Path.Join(curDir, "Database", "blogging.db");
         }
 
@@ -30,5 +32,12 @@ namespace BlogSystem.Context
 }*/
         protected override void OnConfiguring(DbContextOptionsBuilder options)
         => options.UseSqlite($"Data Source={DbPath}");
+
+        protected override void OnModelCreating(ModelBuilder builder)
+        {
+            builder.Entity<User>()
+                .HasIndex(u => u.userName)
+                .IsUnique();
+        }
     }
 }
