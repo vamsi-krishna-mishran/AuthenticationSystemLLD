@@ -8,9 +8,12 @@
 
         public Admin adminId { get; set; }
 
-        public List<int> ratings { get; set; }
-        public Blog() { 
-            ratings = new List<int>();
-        }
+        public List<Rating> ratings { get; set; }
+
+    }
+    public class Rating
+    {
+        public string id { get; set; }
+        public int rating { get; set; }
     }
 }

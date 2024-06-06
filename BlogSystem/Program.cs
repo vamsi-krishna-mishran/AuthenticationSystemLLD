@@ -17,11 +17,15 @@ namespace BlogSystem
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
             builder.Services.AddDbContext<BlogDbContext>();
-            builder.Services.AddScoped<IUserRepository,UserRepository>();
-            builder.Services.AddScoped<IBlogRepository,BlogRepository>();
+
+            builder.Services.AddScoped<IUserRepository, UserRepository>();
+            builder.Services.AddScoped<IBlogRepository, BlogRepository>();
 
             var app = builder.Build();
-
+            using (var context = new BlogDbContext())
+            {
+                context.Database.EnsureCreated();
+            }
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
             {

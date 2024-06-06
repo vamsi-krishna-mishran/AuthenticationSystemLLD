@@ -12,7 +12,7 @@ namespace BlogSystem.Repository
 
         public Task<bool> removeBlog(Blog blog);
 
-        public Task<bool> rateBlog(Blog blog, int rating);
+        public Task<bool> rateBlog(Blog blog, Rating rating);
 
     }
     public class BlogRepository : IBlogRepository
@@ -31,7 +31,7 @@ namespace BlogSystem.Repository
                 await _context.blog.AddAsync(blog);
                 return true;
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 return false;
             }
@@ -44,13 +44,13 @@ namespace BlogSystem.Repository
                 var result = await _context.blog.ToListAsync();
                 return result;
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 return null;
             }
         }
 
-        public async Task<bool> rateBlog(Blog blog, int rating)
+        public async Task<bool> rateBlog(Blog blog, Rating rating)
         {
             try
             {
