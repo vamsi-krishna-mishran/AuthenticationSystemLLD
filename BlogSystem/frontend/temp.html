@@ -77,6 +77,38 @@
             height: 90%;
             width: auto;
         }
+
+        .common-button {
+            outline: none;
+            padding: 0.5rem;
+            border: none;
+            border-radius: 5px;
+            color: white;
+            font-size: 15px;
+            cursor: pointer;
+            margin-bottom: 1rem;
+            transition: transform 0.1s linear;
+        }
+
+        .common-button:hover {
+            transform: scale(1.005);
+            transition: transform 0.1s linear;
+        }
+
+        .sign-in {
+            background-color: rgb(223, 31, 59);
+
+        }
+
+        .sign-up {
+            /* background-color: rgb(184, 40, 61); */
+            background-color: white;
+            color: black !important
+        }
+
+        .p-2 {
+            padding-bottom: 2rem;
+        }
     </style>
 </head>
 
@@ -94,9 +126,11 @@
             To Blogger
         </h1>
         <!-- </pre> -->
-        <h4 class="noto-sans-2">
+        <h4 class="noto-sans-2 p-2">
             Unlock the power of knowledge in just a few minutes
-            </h2>
+        </h4>
+        <button class="common-button sign-in noto-sans-1">sign-in</button>
+        <button class="common-button sign-up noto-sans-1">register</button>
     </div>
 
 </body>
