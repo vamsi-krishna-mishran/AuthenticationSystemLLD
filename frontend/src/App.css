@@ -1,0 +1,10 @@
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box !important;
+  /* overflow-x: hidden !important; */
+}
+
+#root {
+  /* padding: 0.2rem; */
+}

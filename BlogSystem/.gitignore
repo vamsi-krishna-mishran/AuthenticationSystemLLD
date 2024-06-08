@@ -1,0 +1,8 @@
+#igone files in bin folder
+bin/
+
+#igone files in obj folder
+obj/
+
+.vs/
+.vscode/

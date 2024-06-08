@@ -1,0 +1,94 @@
+.noto-sans-1 {
+    font-family: "Noto Sans", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 700;
+    font-style: normal;
+    font-variation-settings:
+        "wdth" 100;
+
+}
+
+.noto-sans-2 {
+    font-family: "Noto Sans", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 300;
+    font-style: normal;
+    font-variation-settings:
+        "wdth" 500;
+    padding: 1rem 0rem;
+}
+
+body {
+    background-image: linear-gradient(120deg, #fdfbfb 0%, #ebedee 100%);
+    min-height: 100vh;
+    padding: 0.1rem;
+}
+button:focus{
+    outline:none !important;
+}
+.content {
+    display: inline-block;
+    width: 30rem;
+    padding-left: 10rem;
+    height: 98vh;
+    display: flex;
+    flex-direction: column;
+    /* align-items: center; */
+    text-align: left;
+    ;
+    justify-content: center;
+}
+
+.navbar {
+    /* border: 4px solid transparent; */
+    display: flex;
+    height: 3rem;
+    background-color: white;
+    -webkit-box-shadow: 2px 4px 20px -4px rgba(207, 195, 207, 1);
+    -moz-box-shadow: 2px 4px 20px -4px rgba(207, 195, 207, 1);
+    box-shadow: 2px 4px 20px -4px rgba(207, 195, 207, 1);
+}
+
+.navbar>img:hover {
+    transform: rotate(3deg) scale(1.1);
+    transition: transform 0.1s ease-in;
+    cursor: pointer;
+}
+
+.nav-icon {
+    margin-top: 2px;
+    height: 90%;
+    width: auto;
+}
+
+.common-button {
+    outline: none;
+    padding: 0.5rem;
+    border: none;
+    border-radius: 5px;
+    color: white;
+    font-size: 15px;
+    cursor: pointer;
+    margin-bottom: 1rem;
+    transition: transform 0.1s linear;
+}
+
+.common-button:hover {
+    transform: scale(1.010);
+    transition: transform 0.1s linear;
+}
+
+.sign-in {
+    background-color: rgb(223, 31, 59);
+
+}
+
+.sign-up {
+    /* background-color: rgb(184, 40, 61); */
+    background-color: white;
+    color: black !important
+}
+
+.p-2 {
+    padding-bottom: 2rem;
+}
