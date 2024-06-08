@@ -42,7 +42,7 @@ namespace BlogSystem
                 options.AddPolicy(MyAllowSpecificOrigins,
             builder =>
             {
-                builder.WithOrigins("http://localhost:5173")
+                builder.WithOrigins("http://localhost:5173", "http://localhost:4173", "http://3.94.143.39")
                        .AllowAnyHeader()
                        .AllowAnyMethod()
                        .AllowCredentials();

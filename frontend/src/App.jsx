@@ -8,11 +8,10 @@ import BaseURI from './backendConfig'
 import
 {
   BrowserRouter as Router,
-  Link,
+  NavLink,
   Routes,
   Route,
 } from "react-router-dom";
-
 
 
 
@@ -24,10 +23,14 @@ const App = () =>
   return (
     <>
 
-      <div className="navbar">
-        <img className="nav-icon" src="https://i.pinimg.com/originals/16/1c/ff/161cff19e668e270ccb1b98856ebd81e.png" />
-      </div>
+
       <Router>
+        <div className="navbar">
+          <NavLink to="/">
+
+            <img className="nav-icon" src="https://i.pinimg.com/originals/16/1c/ff/161cff19e668e270ccb1b98856ebd81e.png" />
+          </NavLink>
+        </div>
         <Routes>
 
           <Route

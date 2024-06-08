@@ -8,7 +8,7 @@ import './Layout.css'
 import Logout from './Logout.jsx';
 import { useNavigate } from 'react-router-dom';
 import BaseURI from '../backendConfig.js'
-import {message} from 'antd'
+import { message } from 'antd'
 
 import
 {
@@ -45,58 +45,67 @@ const items = [
 
 const LayoutC = () =>
 {
-    const[component,setComponent]=useState(<Profile/>)
-    const navigate=useNavigate()
+    const [component, setComponent] = useState(<Profile />)
+    const navigate = useNavigate()
     // const navigate = useNavigate();
     const [collapsed, setCollapsed] = useState(false);
     const {
         token: { colorBgContainer, borderRadiusLG },
     } = theme.useToken();
-    function getCookie(name) {
+    function getCookie(name)
+    {
         const value = `; ${document.cookie}`;
         const parts = value.split(`; ${name}=`);
         if (parts.length === 2) return true;
         return false;
-      }
+    }
     const handleClick = async (event) =>
     {
         console.log(event);
         console.log(event.key);
-        const key=event.key;
-        if(key=="1"){
-            setComponent(<Profile/>);
+        const key = event.key;
+        if (key == "1")
+        {
+            setComponent(<Profile />);
         }
-        else if(key=="2"){
-            setComponent(<BlogList/>);
+        else if (key == "2")
+        {
+            setComponent(<BlogList />);
         }
-        else if(key=="3"){
-            setComponent(<RatedBlogs/>);
+        else if (key == "3")
+        {
+            setComponent(<RatedBlogs />);
         }
-        else if(key=="4"){
-           // setComponent(<Logout/>)
-           try{
-                let call=await fetch(BaseURI+"api/User/logout",{ "credentials":"include",});
-                if(!call.ok){
+        else if (key == "4")
+        {
+            // setComponent(<Logout/>)
+            try
+            {
+                let call = await fetch(BaseURI + "api/User/logout", { "credentials": "include", });
+                if (!call.ok)
+                {
                     throw new Error(await call.text());
                 }
                 message.success("Logged out successfully.")
                 navigate("/login")
-           }
-           catch(err){
+            }
+            catch (err)
+            {
                 message.error(err.message)
-           }
+            }
         }
         // navigate("/blogs")
     }
 
-    useEffect(()=>{
-        let cookiefound=document.cookie['token']
-        console.log(document.cookie)
-        console.log("docuemnt found")
-        if(!getCookie("token")){
+    useEffect(() =>
+    {
+
+
+        if (!getCookie("token"))
+        {
             navigate("/login")
         }
-    },[])
+    }, [])
     return (
 
 
@@ -108,7 +117,7 @@ const LayoutC = () =>
             >
                 <Sider className="sider" style={{ backgroundColor: "transparent" }} collapsible collapsed={collapsed} onCollapse={(value) => setCollapsed(value)}>
                     <div className="demo-logo-vertical" />
-                    <Menu style={{color:"red"}} onClick={event => { handleClick(event) }} defaultSelectedKeys={['1']} mode="inline" items={items} />
+                    <Menu style={{ color: "red" }} onClick={event => { handleClick(event) }} defaultSelectedKeys={['1']} mode="inline" items={items} />
                 </Sider>
                 <Layout>
 
