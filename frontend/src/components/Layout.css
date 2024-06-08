@@ -74,3 +74,26 @@ footer {
 ul {
     padding-top: 3rem;
 }
+
+:where(.css-dev-only-do-not-override-3rel02).ant-layout .ant-layout-sider-trigger{
+    font-size:25px;
+    padding-right:1rem;
+    text-align:right;
+}
+.ant-menu-item:not(.ant-menu-item-selected):hover {
+    background-color:rgba(223, 31, 59,0.3) !important;
+    color:white !important;
+    font-weight:bold;
+}
+.ant-menu-item-selected{
+    background-color:rgb(223, 31, 59) !important;
+    color:white !important;
+    font-weight:bold;
+}
+.ant-menu-item{
+    /* background-color:rgba(223,31,89,0.4); */
+    /* color:white !important ; */
+}
+.ant-menu-item .ant-menu-item-selected{
+
+}

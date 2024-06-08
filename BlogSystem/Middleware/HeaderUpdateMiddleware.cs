@@ -1,5 +1,7 @@
 
 
+using Microsoft.Extensions.Primitives;
+
 public class HeaderUpdateMiddleware
 {
     private readonly RequestDelegate _next;
@@ -17,6 +19,7 @@ public class HeaderUpdateMiddleware
         {
             httpContext.Request.Headers.Add("Authorization", "Bearer " + httpContext.Request.Cookies["token"]);
             string token = httpContext.Request.Headers["Authorization"].ToString();
+            //httpContext.Response.Headers.Add('Access-Control-Allow-Origin',;
             Console.WriteLine("called");
             await _next(httpContext);
         }

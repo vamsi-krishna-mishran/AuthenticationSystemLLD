@@ -1,17 +1,23 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 import BlogList from './BlogList.jsx'
 import Profile from './Profile.jsx'
 import RatedBlogs from './RatedBlogs.jsx'
 import './Layout.css'
+import Logout from './Logout.jsx';
+import { useNavigate } from 'react-router-dom';
+import BaseURI from '../backendConfig.js'
+import {message} from 'antd'
+
 import
 {
     DesktopOutlined,
     FileOutlined,
     PieChartOutlined,
-    TeamOutlined,
-    UserOutlined,
+    ProfileOutlined,
+    LogoutOutlined,
+    StarOutlined
 } from '@ant-design/icons';
 
 import { Breadcrumb, Layout, Menu, theme } from 'antd';
@@ -26,11 +32,11 @@ function getItem(label, key, icon, children)
     };
 }
 const items = [
-    getItem('Profile', '1', <PieChartOutlined />),
-    getItem('Blogs', '2', <DesktopOutlined />),
+    getItem('Profile', '1', <ProfileOutlined />),
+    getItem('Blogs', '2', <FileOutlined />),
 
-    getItem('Rated Blogs', '3', <FileOutlined />),
-    getItem('Logout', '4', <FileOutlined />),
+    getItem('Rated Blogs', '3', <StarOutlined />),
+    getItem('Logout', '4', <LogoutOutlined />),
 
 ];
 
@@ -39,18 +45,58 @@ const items = [
 
 const LayoutC = () =>
 {
+    const[component,setComponent]=useState(<Profile/>)
+    const navigate=useNavigate()
     // const navigate = useNavigate();
     const [collapsed, setCollapsed] = useState(false);
     const {
         token: { colorBgContainer, borderRadiusLG },
     } = theme.useToken();
-
-    const handleClick = (event) =>
+    function getCookie(name) {
+        const value = `; ${document.cookie}`;
+        const parts = value.split(`; ${name}=`);
+        if (parts.length === 2) return true;
+        return false;
+      }
+    const handleClick = async (event) =>
     {
         console.log(event);
         console.log(event.key);
+        const key=event.key;
+        if(key=="1"){
+            setComponent(<Profile/>);
+        }
+        else if(key=="2"){
+            setComponent(<BlogList/>);
+        }
+        else if(key=="3"){
+            setComponent(<RatedBlogs/>);
+        }
+        else if(key=="4"){
+           // setComponent(<Logout/>)
+           try{
+                let call=await fetch(BaseURI+"api/User/logout",{ "credentials":"include",});
+                if(!call.ok){
+                    throw new Error(await call.text());
+                }
+                message.success("Logged out successfully.")
+                navigate("/login")
+           }
+           catch(err){
+                message.error(err.message)
+           }
+        }
         // navigate("/blogs")
     }
+
+    useEffect(()=>{
+        let cookiefound=document.cookie['token']
+        console.log(document.cookie)
+        console.log("docuemnt found")
+        if(!getCookie("token")){
+            navigate("/login")
+        }
+    },[])
     return (
 
 
@@ -62,7 +108,7 @@ const LayoutC = () =>
             >
                 <Sider className="sider" style={{ backgroundColor: "transparent" }} collapsible collapsed={collapsed} onCollapse={(value) => setCollapsed(value)}>
                     <div className="demo-logo-vertical" />
-                    <Menu onClick={event => { handleClick(event) }} defaultSelectedKeys={['1']} mode="inline" items={items} />
+                    <Menu style={{color:"red"}} onClick={event => { handleClick(event) }} defaultSelectedKeys={['1']} mode="inline" items={items} />
                 </Sider>
                 <Layout>
 
@@ -72,7 +118,7 @@ const LayoutC = () =>
                         }}
                     >
 
-                        <Profile />
+                        {component}
 
 
                         {/* <div

@@ -25,7 +25,7 @@ namespace BlogSystem.Controllers
 
         [AllowAnonymous]
         [HttpPost("register")]
-        public async Task<IActionResult> Post(User user)
+        public async Task<IActionResult> Post([FromBody] User user)
         {
             try
             {
@@ -34,11 +34,14 @@ namespace BlogSystem.Controllers
                 {
                     return Ok($"{user}");
                 }
-                return StatusCode(400, "registration Failed");
+                else
+                {
+                    return BadRequest($"user already registered");
+                }
             }
             catch(Exception ex)
             {
-                return BadRequest(ex.Message);
+                return BadRequest("registration Failed");
             }
         }
         [AllowAnonymous]
@@ -49,8 +52,16 @@ namespace BlogSystem.Controllers
             if (result!=null)
             //if(true)
             {
-                CookieOptions options=new CookieOptions();
-                options.Expires = DateTime.UtcNow.AddMinutes(30);
+                //CookieOptions options=new CookieOptions();
+                //options.Expires = DateTime.UtcNow.AddMinutes(30);
+                var options = new CookieOptions()
+                {
+                   // Path = "/",
+                    Expires = DateTimeOffset.UtcNow.AddDays(1),
+                    IsEssential = true,
+                    HttpOnly = false,
+                    Secure = false,
+                };
                 string key = _config["Jwt:Key"];
                 string issuer = _config["Jwt:Issuer"];
                 int liveTime = Convert.ToInt16(_config["Jwt:LiveTime"]);

@@ -1,8 +1,10 @@
 import React from 'react';
 import "./App.css"
 import Layout from './components/LayoutC';
+import { message } from 'antd';
 
 import Login from './components/Login';
+import BaseURI from './backendConfig'
 import
 {
   BrowserRouter as Router,

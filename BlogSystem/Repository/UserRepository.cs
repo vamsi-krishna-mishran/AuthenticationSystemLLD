@@ -47,7 +47,7 @@ namespace BlogSystem.Repository
 
         public async Task<bool> register(User user)
         {
-            var result = await _context.users.FindAsync(user.id);
+            var result = await _context.users.Where(us => us.userName == user.userName).FirstOrDefaultAsync();
             if (result == null)
             {
                 await _context.users.AddAsync(user);

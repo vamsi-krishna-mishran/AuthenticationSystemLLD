@@ -39,14 +39,14 @@ namespace BlogSystem
 
             builder.Services.AddCors(options =>
             {
-                options.AddPolicy(name: MyAllowSpecificOrigins,
-                                  policy =>
-                                  {
-                                      policy.AllowAnyOrigin()
-                                      .AllowAnyOrigin()
-                                      .AllowAnyMethod();
-                                      
-                                  });
+                options.AddPolicy(MyAllowSpecificOrigins,
+            builder =>
+            {
+                builder.WithOrigins("http://localhost:5173")
+                       .AllowAnyHeader()
+                       .AllowAnyMethod()
+                       .AllowCredentials();
+            });
             });
             // Add services to the container.
 
@@ -64,6 +64,9 @@ namespace BlogSystem
             {
                 context.Database.EnsureCreated();
             }
+            app.UseCors(MyAllowSpecificOrigins);
+
+
             // Configure the HTTP request pipeline.
             if (!app.Environment.IsDevelopment())
             {
@@ -74,7 +77,6 @@ namespace BlogSystem
             app.UseHttpsRedirection();
             app.UseHeaderUpdateMiddleware();
 
-            app.UseCors(MyAllowSpecificOrigins);
             app.UseAuthentication();
             app.UseAuthorization();
 
