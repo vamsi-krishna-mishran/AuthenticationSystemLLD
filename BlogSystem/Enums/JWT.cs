@@ -8,12 +8,12 @@ namespace BlogSystem.Enums
 {
     public static class JWT
     {
-        public static string generateToken(UserType role,string key,string issuer,int liveTime)
+        public static string generateToken(UserType role,string key,string issuer,int liveTime,string userName)
         {
             var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(key));
             var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
             var claims = new List<Claim> {
-                new Claim(ClaimTypes.Name, issuer),
+                new Claim(ClaimTypes.Name, userName),
                 new Claim(ClaimTypes.Role, role.ToString()),
             };
 

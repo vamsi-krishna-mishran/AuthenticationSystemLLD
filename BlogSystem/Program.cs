@@ -58,8 +58,11 @@ namespace BlogSystem
 
             builder.Services.AddScoped<IUserRepository, UserRepository>();
             builder.Services.AddScoped<IBlogRepository, BlogRepository>();
+            builder.Services.AddScoped<IRatingRepository,RatingRepository>();
+            builder.Services.AddAutoMapper(typeof(Program).Assembly);
 
             var app = builder.Build();
+            
             using (var context = new BlogDbContext())
             {
                 context.Database.EnsureCreated();

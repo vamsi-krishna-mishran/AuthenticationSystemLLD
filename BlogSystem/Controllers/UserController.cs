@@ -65,7 +65,7 @@ namespace BlogSystem.Controllers
                 string key = _config["Jwt:Key"];
                 string issuer = _config["Jwt:Issuer"];
                 int liveTime = Convert.ToInt16(_config["Jwt:LiveTime"]);
-                string token=JWT.generateToken(result.userType,key, issuer, liveTime);
+                string token=JWT.generateToken(result.userType,key, issuer, liveTime,result.userName);
 
 
                 Response.Cookies.Append("token", token, options);

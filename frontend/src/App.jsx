@@ -5,6 +5,7 @@ import { message } from 'antd';
 
 import Login from './components/Login';
 import BaseURI from './backendConfig'
+import ViewBlog from './components/ViewBlog'
 import
 {
   BrowserRouter as Router,
@@ -37,7 +38,7 @@ const App = () =>
             path="/login"
             element={<Login />}
           />
-
+          <Route path="/blogs/:blogId" element={<ViewBlog />} />
 
 
           <Route path="/" element={<Layout />} >

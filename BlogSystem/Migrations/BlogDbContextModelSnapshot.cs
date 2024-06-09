@@ -54,21 +54,29 @@ namespace BlogSystem.Migrations
 
             modelBuilder.Entity("BlogSystem.Models.Blog", b =>
                 {
-                    b.Property<int>("blogId")
+                    b.Property<int>("id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
                     b.Property<int>("adminIdid")
                         .HasColumnType("INTEGER");
 
-                    b.Property<string>("blogURI")
+                    b.Property<string>("blogDocument")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("blogHeading")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("blogThumbnailImg")
                         .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<DateTime>("publishDate")
                         .HasColumnType("TEXT");
 
-                    b.HasKey("blogId");
+                    b.HasKey("id");
 
                     b.HasIndex("adminIdid");
 
@@ -81,17 +89,22 @@ namespace BlogSystem.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<int?>("blogId")
+                    b.Property<int>("blogid")
                         .HasColumnType("INTEGER");
 
                     b.Property<int>("rating")
                         .HasColumnType("INTEGER");
 
+                    b.Property<int>("userid")
+                        .HasColumnType("INTEGER");
+
                     b.HasKey("id");
 
-                    b.HasIndex("blogId");
+                    b.HasIndex("blogid");
 
-                    b.ToTable("Rating");
+                    b.HasIndex("userid");
+
+                    b.ToTable("rating");
                 });
 
             modelBuilder.Entity("BlogSystem.Models.User", b =>
@@ -99,10 +112,6 @@ namespace BlogSystem.Migrations
                     b.Property<int>("id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
-
-                    b.Property<string>("Discriminator")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
 
                     b.Property<int?>("addressid")
                         .HasColumnType("INTEGER");
@@ -133,22 +142,11 @@ namespace BlogSystem.Migrations
                         .IsUnique();
 
                     b.ToTable("users");
-
-                    b.HasDiscriminator<string>("Discriminator").HasValue("User");
-
-                    b.UseTphMappingStrategy();
-                });
-
-            modelBuilder.Entity("BlogSystem.Models.Admin", b =>
-                {
-                    b.HasBaseType("BlogSystem.Models.User");
-
-                    b.HasDiscriminator().HasValue("Admin");
                 });
 
             modelBuilder.Entity("BlogSystem.Models.Blog", b =>
                 {
-                    b.HasOne("BlogSystem.Models.Admin", "adminId")
+                    b.HasOne("BlogSystem.Models.User", "adminId")
                         .WithMany()
                         .HasForeignKey("adminIdid")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -159,9 +157,21 @@ namespace BlogSystem.Migrations
 
             modelBuilder.Entity("BlogSystem.Models.Rating", b =>
                 {
-                    b.HasOne("BlogSystem.Models.Blog", null)
-                        .WithMany("ratings")
-                        .HasForeignKey("blogId");
+                    b.HasOne("BlogSystem.Models.Blog", "blog")
+                        .WithMany()
+                        .HasForeignKey("blogid")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("BlogSystem.Models.User", "user")
+                        .WithMany()
+                        .HasForeignKey("userid")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("blog");
+
+                    b.Navigation("user");
                 });
 
             modelBuilder.Entity("BlogSystem.Models.User", b =>
@@ -171,11 +181,6 @@ namespace BlogSystem.Migrations
                         .HasForeignKey("addressid");
 
                     b.Navigation("address");
-                });
-
-            modelBuilder.Entity("BlogSystem.Models.Blog", b =>
-                {
-                    b.Navigation("ratings");
                 });
 #pragma warning restore 612, 618
         }

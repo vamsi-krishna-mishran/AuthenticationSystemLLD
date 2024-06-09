@@ -11,6 +11,8 @@ namespace BlogSystem.Context
         public DbSet<User> users { get; set; }
         public DbSet<Address> address { get; set; }
         public DbSet<Blog> blog { get; set; }
+
+        public DbSet<Rating> rating { get; set; }
         public IConfiguration config { get; set; }
         string DbPath { get; set; }
         public BlogDbContext()

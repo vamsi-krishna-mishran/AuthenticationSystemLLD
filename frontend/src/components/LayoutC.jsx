@@ -19,8 +19,11 @@ import
     LogoutOutlined,
     StarOutlined
 } from '@ant-design/icons';
+import { UploadOutlined } from '@ant-design/icons';
+
 
 import { Breadcrumb, Layout, Menu, theme } from 'antd';
+import UploadBlog from './UploadBlog.jsx';
 const { Header, Content, Footer, Sider } = Layout;
 function getItem(label, key, icon, children)
 {
@@ -32,11 +35,14 @@ function getItem(label, key, icon, children)
     };
 }
 const items = [
-    getItem('Profile', '1', <ProfileOutlined />),
-    getItem('Blogs', '2', <FileOutlined />),
+    getItem('Profile', '2', <ProfileOutlined />),
+    getItem('Blogs', '1', <FileOutlined />),
 
     getItem('Rated Blogs', '3', <StarOutlined />),
-    getItem('Logout', '4', <LogoutOutlined />),
+    getItem('Upload Blog','4',<UploadOutlined/>),
+
+    getItem('Logout', '5', <LogoutOutlined />)
+    
 
 ];
 
@@ -45,7 +51,9 @@ const items = [
 
 const LayoutC = () =>
 {
-    const [component, setComponent] = useState(<Profile />)
+    const [component, setComponent] = useState(<BlogList />)
+    const [admin,SetAdmin]=useState(true);
+    
     const navigate = useNavigate()
     // const navigate = useNavigate();
     const [collapsed, setCollapsed] = useState(false);
@@ -64,11 +72,11 @@ const LayoutC = () =>
         console.log(event);
         console.log(event.key);
         const key = event.key;
-        if (key == "1")
+        if (key == "2")
         {
             setComponent(<Profile />);
         }
-        else if (key == "2")
+        else if (key == "1")
         {
             setComponent(<BlogList />);
         }
@@ -76,7 +84,7 @@ const LayoutC = () =>
         {
             setComponent(<RatedBlogs />);
         }
-        else if (key == "4")
+        else if (key == "5")
         {
             // setComponent(<Logout/>)
             try
@@ -93,6 +101,9 @@ const LayoutC = () =>
             {
                 message.error(err.message)
             }
+        }
+        else if(key=="4"){
+            setComponent(<UploadBlog/>)
         }
         // navigate("/blogs")
     }
