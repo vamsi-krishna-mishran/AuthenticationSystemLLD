@@ -45,8 +45,8 @@ namespace BlogSystem.Repository
                     }
                     else
                     {
-                        Drating.user = user;
-                        Drating.blog = blog;
+                        rating.user = user;
+                        rating.blog = blog;
                         var res = await _context.rating.AddAsync(rating);
                         await _context.SaveChangesAsync();
                         result = (res.Entity, "Rating added successfully.");

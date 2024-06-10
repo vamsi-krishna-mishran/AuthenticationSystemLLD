@@ -13,11 +13,11 @@ import { Popconfirm } from "antd";
 
 
 const customIcons = {
-    1: <FrownOutlined />,
-    2: <FrownOutlined />,
-    3: <MehOutlined />,
-    4: <SmileOutlined />,
-    5: <SmileOutlined />,
+    1: <FrownOutlined title="poor" />,
+    2: <FrownOutlined title='average' />,
+    3: <MehOutlined title='good' />,
+    4: <SmileOutlined title='better' />,
+    5: <SmileOutlined title='excellent' />,
 };
 
 
@@ -127,7 +127,31 @@ function AdminBlogs({ admin })
 //onClick={(e)=>deleteBlog(e,blog.id)}
 function BlogCard({ deleteBlog, blog, onClick, id })
 {
+    const giveRating = async (val) =>
+    {
 
+        try
+        {
+            let call = await API("api/Rating/addrating", {
+                headers: {
+                    'Accept': '*/*',
+                    'Content-Type': 'application/json'
+                },
+                "method": "POST",
+                "credentials": "include",
+                "body": JSON.stringify({ rating: val, blogId: id })
+            });
+            if (!call.ok)
+            {
+                throw new Error(await call.text());
+            }
+            message.success("ratind added successfully")
+        }
+        catch (err)
+        {
+            message.error(err.message);
+        }
+    }
 
     return (
         <Card onClick={onClick} className="blog-card"
@@ -139,10 +163,9 @@ function BlogCard({ deleteBlog, blog, onClick, id })
                     width={300}
                 />
             }
-            actions={[
+        // actions={[
 
-                <DeleteOutlined onClick={(e) => deleteBlog(e, blog.id)} title="delete blog" key="delete" style={{ color: "red", fontSize: "1rem" }} />,
-            ]}
+        // ]}
 
         >
             <Meta
@@ -152,10 +175,16 @@ function BlogCard({ deleteBlog, blog, onClick, id })
                 description=""
             />
             <i>published on {blog.publishDate}</i>
-            <Flex gap="middle" vertical>
-                <Rate defaultValue={3} character={({ index = 0 }) => customIcons[index + 1]} />
+            <Flex gap="middle" style={{
+                flexDirection: "row",
+                justifyContent: "space-around",
+                marginTop: "1rem"
+            }} >
+                <Rate onChange={(val) => giveRating(val)} onClick={e => { e.stopPropagation(); }} defaultValue={3} character={({ index = 0 }) => customIcons[index + 1]} />
+                <DeleteOutlined onClick={(e) => deleteBlog(e, blog.id)} title="delete blog" key="delete" style={{ color: "red", fontSize: "1rem" }} />,
+
             </Flex>
-        </Card>
+        </Card >
     )
 }
 
