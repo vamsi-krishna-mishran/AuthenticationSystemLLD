@@ -138,7 +138,7 @@ const LayoutC = () =>
                         }}
                     >
 
-                        {component}
+                        {getCookie() && component}
 
 
                         {/* <div
