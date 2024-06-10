@@ -17,18 +17,33 @@ public class HeaderUpdateMiddleware
         //svc.Write(DateTime.Now.Ticks.ToString());
         try
         {
-            httpContext.Request.Headers.Add("Authorization", "Bearer " + httpContext.Request.Cookies["token"]);
-            string token = httpContext.Request.Headers["Authorization"].ToString();
-            //httpContext.Response.Headers.Add('Access-Control-Allow-Origin',;
-            Console.WriteLine("called");
-            await _next(httpContext);
+            var token = httpContext?.Request?.Cookies?["token"];
+            if (token == null || string.IsNullOrEmpty(token))
+            {
+                // Handle the case where the token is missing or empty
+                token = "NONE";
+            }
+
+            // Add the Authorization header only if the token is not null or empty
+            //if (!string.IsNullOrEmpty(token))
+            {
+                Console.WriteLine("___________");
+                Console.WriteLine(token);
+                Console.WriteLine("___________");
+                httpContext.Request.Headers.Add("Authorization", "Bearer " + token);
+                await _next(httpContext);
+            }
         }
         catch(Exception ex)
         {
-            httpContext.Response.StatusCode = 401;
+            httpContext.Response.StatusCode = 500;
             httpContext.Response.ContentType = "text/plain";   //add this line.....
-
-            await httpContext.Response.WriteAsync("login first");
+            Console.WriteLine("********HeaderUpdateMiddlware2*********");
+            await httpContext.Response.WriteAsync(ex.Message);
+            Console.Write(ex.ToString());
+            Console.WriteLine(ex.Message);
+            Console.WriteLine("********HeaderUpdateMiddlware2*********");
+            //await _next(httpContext);
             return;
         }
         

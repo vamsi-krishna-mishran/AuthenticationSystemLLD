@@ -1,6 +1,7 @@
 ﻿using BlogSystem.Models;
 using Microsoft.EntityFrameworkCore;
 using System;
+using System.Runtime.InteropServices;
 
 namespace BlogSystem.Context
 {
@@ -18,13 +19,27 @@ namespace BlogSystem.Context
         public BlogDbContext()
         {
 
-            var folder = Environment.SpecialFolder.LocalApplicationData;
-            var path = Environment.GetFolderPath(folder);
+            
             //DbPath = System.IO.Path.Join(path, "blogging.db");
-            string curDir = System.IO.Directory.GetCurrentDirectory();
-            Console.WriteLine(curDir);
-            System.IO.Directory.CreateDirectory("Database");
-            DbPath = System.IO.Path.Join(curDir, "Database", "blogging.db");
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+            {
+                var folder = Environment.SpecialFolder.LocalApplicationData;
+                var path = Environment.GetFolderPath(folder);
+                string curDir = System.IO.Directory.GetCurrentDirectory();
+                Console.WriteLine(curDir);
+                System.IO.Directory.CreateDirectory("Database");
+                DbPath = System.IO.Path.Join(curDir, "Database", "blogging.db");
+            }
+            else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
+            {
+                string curDir = System.IO.Directory.GetCurrentDirectory();
+                Console.WriteLine(curDir);
+                System.IO.Directory.CreateDirectory("Database");
+                DbPath = System.IO.Path.Join(curDir, "Database", "blogging.db");
+                Console.Write("inside linux platform ");
+            }
+            
+            
         }
 
         /*protected override void OnConfiguring(DbContextOptionsBuilder options)

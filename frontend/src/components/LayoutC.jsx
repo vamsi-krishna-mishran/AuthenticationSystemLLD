@@ -39,10 +39,10 @@ const items = [
     getItem('Blogs', '1', <FileOutlined />),
 
     getItem('Rated Blogs', '3', <StarOutlined />),
-    getItem('Upload Blog','4',<UploadOutlined/>),
+    getItem('Upload Blog', '4', <UploadOutlined />),
 
     getItem('Logout', '5', <LogoutOutlined />)
-    
+
 
 ];
 
@@ -52,8 +52,8 @@ const items = [
 const LayoutC = () =>
 {
     const [component, setComponent] = useState(<BlogList />)
-    const [admin,SetAdmin]=useState(true);
-    
+    const [admin, SetAdmin] = useState(true);
+
     const navigate = useNavigate()
     // const navigate = useNavigate();
     const [collapsed, setCollapsed] = useState(false);
@@ -102,8 +102,9 @@ const LayoutC = () =>
                 message.error(err.message)
             }
         }
-        else if(key=="4"){
-            setComponent(<UploadBlog/>)
+        else if (key == "4")
+        {
+            setComponent(<UploadBlog />)
         }
         // navigate("/blogs")
     }
@@ -138,7 +139,7 @@ const LayoutC = () =>
                         }}
                     >
 
-                        {getCookie() && component}
+                        {getCookie("token") && component}
 
 
                         {/* <div

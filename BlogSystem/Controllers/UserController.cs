@@ -60,7 +60,8 @@ namespace BlogSystem.Controllers
                     Expires = DateTimeOffset.UtcNow.AddDays(1),
                     IsEssential = true,
                     HttpOnly = false,
-                    Secure = false,
+                    Secure = false
+                    //SameSite=SameSiteMode.None
                 };
                 string key = _config["Jwt:Key"];
                 string issuer = _config["Jwt:Issuer"];
