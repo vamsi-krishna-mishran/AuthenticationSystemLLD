@@ -7,6 +7,7 @@ using System.Security.Claims;
 
 namespace BlogSystem.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class UserController : ControllerBase
@@ -22,6 +23,46 @@ namespace BlogSystem.Controllers
             _brepo = brepo;
         }
 
+        [Authorize]
+        [HttpPut("update")]
+        public async Task<IActionResult> Put(User user)
+        {
+            try
+            {
+                var user1 = HttpContext.User;
+                string username = user1.FindFirstValue(ClaimTypes.Name);
+                var res = await _repo.updateUser(user,username);
+                if (res.Item1 == null)
+                {
+                    throw new Exception(res.Item2);
+                }
+                return Ok(res.Item1);
+            }
+            catch(Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpGet("getDetails")]
+        public async Task<IActionResult> Get32()
+        {
+            try
+            {
+                var user = HttpContext.User;
+                string username = user.FindFirstValue(ClaimTypes.Name);
+                var result = await _repo.getDetails(username);
+                if (result.Item1 == null)
+                {
+                    throw new Exception(result.Item2);
+                }
+                return Ok(result.Item1);
+            }
+            catch(Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
 
         [AllowAnonymous]
         [HttpPost("register")]
@@ -68,9 +109,9 @@ namespace BlogSystem.Controllers
                 int liveTime = Convert.ToInt16(_config["Jwt:LiveTime"]);
                 string token=JWT.generateToken(result.userType,key, issuer, liveTime,result.userName);
 
-
+                //Response.Headers.Add('Access-Control-Allow-Methods',);
                 Response.Cookies.Append("token", token, options);
-                return Ok("Login success.");
+                return Ok((result.userType==UserType.ADMIN));
             }
             return Unauthorized();
 

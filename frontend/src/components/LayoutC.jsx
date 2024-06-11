@@ -9,6 +9,8 @@ import Logout from './Logout.jsx';
 import { useNavigate } from 'react-router-dom';
 import BaseURI from '../backendConfig.js'
 import { message } from 'antd'
+import { useContext } from 'react';
+import { MyContext } from '../App.jsx';
 
 import
 {
@@ -34,26 +36,28 @@ function getItem(label, key, icon, children)
         label,
     };
 }
-const items = [
-    getItem('Profile', '2', <ProfileOutlined />),
-    getItem('Blogs', '1', <FileOutlined />),
 
-    getItem('Rated Blogs', '3', <StarOutlined />),
-    getItem('Upload Blog', '4', <UploadOutlined />),
-
-    getItem('Logout', '5', <LogoutOutlined />)
-
-
-];
 
 
 
 
 const LayoutC = () =>
 {
+    const items = [
+        getItem('Profile', '2', <ProfileOutlined />),
+        getItem('Blogs', '1', <FileOutlined />),
+    
+        getItem('Rated Blogs', '3', <StarOutlined />)
+        ,
+        getItem('Logout', '5', <LogoutOutlined />)
+    
+    ];
     const [component, setComponent] = useState(<BlogList />)
     const [admin, SetAdmin] = useState(true);
-
+    const {text,setText}=useContext(MyContext)
+    
+    text&&items.splice(3,0,getItem('Upload Blog', '4', <UploadOutlined />))
+    
     const navigate = useNavigate()
     // const navigate = useNavigate();
     const [collapsed, setCollapsed] = useState(false);
@@ -102,7 +106,7 @@ const LayoutC = () =>
                 message.error(err.message)
             }
         }
-        else if (key == "4")
+        else if (text && key == "4")
         {
             setComponent(<UploadBlog />)
         }

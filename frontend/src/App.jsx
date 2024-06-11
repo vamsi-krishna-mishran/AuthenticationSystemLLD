@@ -13,6 +13,9 @@ import
   Routes,
   Route,
 } from "react-router-dom";
+import { createContext } from 'react';
+import { useState } from 'react';
+const MyContext = createContext(true);
 
 
 
@@ -21,7 +24,12 @@ import
 
 const App = () =>
 {
+  const [text, setText] = useState("");
   return (
+    <MyContext.Provider value={{text,setText}}>
+    
+
+  
     <>
 
 
@@ -47,7 +55,10 @@ const App = () =>
         </Routes>
       </Router>
 
-    </>)
+    </>
+    </MyContext.Provider>)
 
 };
 export default App;
+
+export {MyContext}

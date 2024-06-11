@@ -4,10 +4,13 @@ import { EyeInvisibleOutlined, EyeTwoTone } from '@ant-design/icons';
 import { Divider, message } from 'antd';
 const { Option } = Select;
 import { UserOutlined, } from '@ant-design/icons';
-import BaseURI from '../backendConfig.js'
+import URI from '../backendConfig.js'
 import { useNavigate } from 'react-router-dom'
 
+import { MyContext } from '../App.jsx';
+import { useContext } from 'react';
 
+const BaseURI=URI
 const statesInIndia = [
   "Andhra Pradesh",
   "Arunachal Pradesh",
@@ -81,19 +84,21 @@ function Login()
   )
 }
 
-const Register = () =>
+const Register = ({setCountt,setCount,user}) =>
 {
   const [form] = Form.useForm();
 
   const apiCall = async (jsonObj) =>
   {
-    let call = await fetch(BaseURI + "api/User/register", {
-      method: "POST",
+      let end=user?"api/User/update":"api/User/register";
+    let call = await fetch(URI + end, {
+      method: user?"PUT":"POST",
       body: jsonObj,
+      "credentials": "include",
+
       headers: {
         "Accept": "*/*",
-        "Content-Type": "application/json",
-        "credentials": "include",
+        "Content-Type": "application/json"
 
         // 'Content-Type': 'application/x-www-form-urlencoded',
       }
@@ -106,7 +111,7 @@ const Register = () =>
     return result
   }
 
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState(user!=null);
 
   const onFinish = async (values) =>
   {
@@ -136,9 +141,10 @@ const Register = () =>
       const result = await apiCall(resultObj)
       if (result)
       {
-        message.success("user registered successfully.")
+        message.success(user?"details updated successfully.":"user registered successfully.")
         form.resetFields();
-
+        user&&setCount(false)
+        user&&setCountt(prev=>prev+1)
       }
       else
       {
@@ -164,13 +170,14 @@ const Register = () =>
   const onClose = () =>
   {
     setOpen(false);
+    if(user)setCount(false);
   };
   return (
     <>
       {/* <Button type="primary" onClick={showDrawer} icon={<PlusOutlined />}>
             New account
           </Button> */}
-      <button onClick={showDrawer} className="common-button sign-up noto-sans-1">register</button>
+      {!user &&<button onClick={showDrawer} className="common-button sign-up noto-sans-1">register</button>}
       <Drawer
         title="Create a new Profile"
         width={720}
@@ -190,7 +197,7 @@ const Register = () =>
       //   </Space>
       // }
       >
-        <Form form={form} layout="vertical" hideRequiredMark onFinish={onFinish} onFinishFailed={onFinishFailed}>
+        <Form initialValues={user&&{...user,reenterpassword:user.password,...user.address,userType:String(user.userType),gender:"male"}} form={form} layout="vertical" hideRequiredMark onFinish={onFinish} onFinishFailed={onFinishFailed}>
           <Row gutter={16}>
             <Col span={8}>
               <Form.Item
@@ -211,15 +218,17 @@ const Register = () =>
               <Form.Item
                 name="userName"
                 label="User Name"
+                
                 rules={[
                   {
                     required: true,
                     type: 'email',
-                    message: 'Please enter email',
+                    message: 'Please enter email'
+                    
                   },
                 ]}
               >
-                <Input placeholder="Please enter email id" />
+                <Input disabled={user} placeholder="Please enter email id" />
               </Form.Item>
             </Col>
             <Col span={8}>
@@ -264,6 +273,7 @@ const Register = () =>
               <Form.Item
                 name="gender"
                 label="gender"
+                
                 rules={[
                   {
                     required: true,
@@ -271,7 +281,7 @@ const Register = () =>
                   },
                 ]}
               >
-                <Select placeholder="Please choose your gender">
+                <Select  placeholder="Please choose your gender">
                   <Option value="male">Male</Option>
                   <Option value="female">Female</Option>
                 </Select>
@@ -441,7 +451,7 @@ const Register = () =>
             <Space>
               <Button danger>Cancel</Button>
               <Button type="primary" danger htmlType='submit'>
-                Submit
+                {user?"Update":"Submit"}
               </Button>
             </Space>
           </Row>
@@ -457,6 +467,8 @@ const LoginForm = () =>
   const navigate = useNavigate();
   const [open, setOpen] = useState(false);
   const [form] = Form.useForm();
+  const { text, setText } = useContext(MyContext);
+
   const showDrawer = () =>
   {
     setOpen(true);
@@ -474,9 +486,15 @@ const LoginForm = () =>
     });
     if (!call.ok)
     {
+      setText(false)
       throw new Error(call.statusText)
     }
     let result = await call.text();
+    const isadmin=result;
+    //console.log(isadmin)
+    //console.log(typeof isadmin)
+    setText(isadmin=='true')
+    //setText(true)
     return result
   }
 
@@ -488,7 +506,8 @@ const LoginForm = () =>
       console.log(uri)
       const res = await apiCall(uri);
       form.resetFields();
-      message.success(res)
+      
+      message.success("user login success.")
       navigate('/')
     }
     catch (err)
@@ -579,3 +598,4 @@ const LoginForm = () =>
   );
 }
 export default Login
+export {Register}

@@ -6,8 +6,10 @@ import { Avatar, Card } from 'antd';
 const { Meta } = Card;
 import { useNavigate } from 'react-router-dom'
 import { DeleteOutlined } from '@ant-design/icons';
-import { Flex, Rate } from 'antd';
+import { Flex, Rate,Button } from 'antd';
 import { FrownOutlined, MehOutlined, SmileOutlined } from '@ant-design/icons';
+import { MyContext } from '../App';
+import { useContext } from 'react';
 
 import { Popconfirm } from "antd";
 
@@ -24,16 +26,17 @@ const customIcons = {
 function BlogList()
 {
     const [admin, setAdmin] = useState(true);
+    const [render,setRender]=useState(1);
     return (
         <div>
             {/* {admin && <UploadBlog/>} */}
-            <AdminBlogs admin={true} />
-            <AdminBlogs admin={false} />
+            <AdminBlogs render={render} setRender={setRender} admin={true} />
+            <AdminBlogs render={render} setRender={setRender} admin={false} />
         </div>
     )
 }
 
-function AdminBlogs({ admin })
+function AdminBlogs({ render,admin,setRender })
 {
     const navigate = useNavigate()
     const [blogs, setBlogs] = useState(null)
@@ -57,13 +60,13 @@ function AdminBlogs({ admin })
             {
                 throw new Error(await call.text())
             }
-            setBlogs((prev) =>
-            {
-                const netresult = prev.filter((el) => el.id != blog);
-                console.log(netresult)
-                return netresult
-            });
-
+            // setBlogs((prev) =>
+            // {
+            //     const netresult = prev.filter((el) => el.id != blog);
+            //     console.log(netresult)
+            //     return netresult
+            // });
+            setRender(prev=>prev+1)
             message.success("deleted successfully.");
 
         }
@@ -99,7 +102,7 @@ function AdminBlogs({ admin })
                 message.error(err.message)
             }
         })()
-    }, [])
+    }, [render])
 
     //console.log(blogs)
     if (!blogs)
@@ -115,7 +118,7 @@ function AdminBlogs({ admin })
             <div className='blog-grid'>
                 {blogs.map((blog, ix) =>
                 {
-                    return <BlogCard deleteBlog={deleteBlog} onClick={() => openBlog(blog.id)} id={blog.id} blog={blog} key={ix} />
+                    return <BlogCard render={render} setRender={setRender} deleteBlog={deleteBlog} onClick={() => openBlog(blog.id)} id={blog.id} blog={blog} key={ix} />
                 })}
             </div>
 
@@ -123,10 +126,31 @@ function AdminBlogs({ admin })
     )
 }
 
-
 //onClick={(e)=>deleteBlog(e,blog.id)}
-function BlogCard({ deleteBlog, blog, onClick, id })
+function BlogCard({ render,setRender,deleteBlog, blog, onClick, id })
 {
+    const [rating,setRating]=useState(0);
+    const {text,setText}=useContext(MyContext)
+    //console.log("rendering");
+    //console.log('rendering '+count)
+    //count+=1
+    useEffect(()=>{
+        (async function(){
+            try{
+                let api=await API('api/Rating/getrating/'+id,{"credentials":"include"});
+                if(!api.ok){
+                    throw new Error(await api.text());
+                }
+                const jsonObj=await api.json();
+                //console.log(jsonObj);
+                //alert(jsonObj.rating)
+                setRating(jsonObj.rating);
+            }
+            catch(err){
+                message.error(err.message)
+            }
+        })()
+    },[render])
     const giveRating = async (val) =>
     {
 
@@ -145,13 +169,21 @@ function BlogCard({ deleteBlog, blog, onClick, id })
             {
                 throw new Error(await call.text());
             }
-            message.success("ratind added successfully")
+            setRender(prev=>prev+1)
+            message.success(await call.text())
+            //setRating(val);
         }
         catch (err)
         {
             message.error(err.message);
         }
     }
+    const confirm = (e) => {
+        e.stopPropagation();
+        console.log(e);
+        message.success('Click on Yes');
+      };
+      
 
     return (
         <Card onClick={onClick} className="blog-card"
@@ -180,9 +212,19 @@ function BlogCard({ deleteBlog, blog, onClick, id })
                 justifyContent: "space-around",
                 marginTop: "1rem"
             }} >
-                <Rate onChange={(val) => giveRating(val)} onClick={e => { e.stopPropagation(); }} defaultValue={3} character={({ index = 0 }) => customIcons[index + 1]} />
-                <DeleteOutlined onClick={(e) => deleteBlog(e, blog.id)} title="delete blog" key="delete" style={{ color: "red", fontSize: "1rem" }} />,
-
+                <Rate value={rating} onChange={(val) => giveRating(val)} onClick={e => { e.stopPropagation(); }} defaultValue={rating} character={({ index = 0 }) => customIcons[index + 1]} />
+                {/* <DeleteOutlined onClick={(e) => deleteBlog(e, blog.id)} title="delete blog" key="delete" style={{ color: "red", fontSize: "1rem" }} />, */}
+                {text&&<Popconfirm
+                    onClick={e => { e.stopPropagation(); }}
+                    title="Delete the Blog"
+                    description="Are you sure to delete this blog?"
+                    onConfirm={(e)=>deleteBlog(e,blog.id)}
+                    onCancel={(e)=>e.stopPropagation()}
+                    okText="Yes"
+                    cancelText="No"
+                >
+                    <Button style={{color:"white",fontWeight:"bold",backgroundColor:"rgb(223, 31, 59)"}} danger>Delete</Button>
+                </Popconfirm>}
             </Flex>
         </Card >
     )

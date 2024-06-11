@@ -13,3 +13,15 @@ body {
     padding: 0;
     width:100% !important;
 }
+iframe{
+    /* margin-top:5rem; */
+}
+.pdf-container{
+    /* border:5px solid red !important; */
+    position:fixed;
+    top:3rem;
+    left:0rem;
+    right:0rem;
+    bottom:0rem;
+    
+}

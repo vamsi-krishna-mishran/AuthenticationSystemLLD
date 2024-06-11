@@ -40,6 +40,26 @@ namespace BlogSystem.Controllers
             return "value";
         }
 
+        [HttpGet("getrating/{id}")]
+        public async Task<IActionResult> Get2(int id)
+        {
+            try
+            {
+                var user = HttpContext.User;
+                string username = user.FindFirstValue(ClaimTypes.Name);
+                var result = await _repo.getRatingWithUser(id, username);
+                if (result.Item1 == null)
+                {
+                    throw new Exception(result.Item2);
+                }
+                return Ok(result.Item1);
+            }
+            catch(Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
         // POST api/<RatingController>
         [HttpPost("addrating")]
         public async Task<IActionResult> Post([FromBody] RatingDTO rating)

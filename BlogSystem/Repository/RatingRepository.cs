@@ -10,6 +10,8 @@ namespace BlogSystem.Repository
     {
         public Task<(Rating, string)> addRating(Rating rating,string username,int blogid);
 
+        public Task<(Rating, string)> getRatingWithUser(int blogid, string username);
+
         
     }
 
@@ -26,7 +28,8 @@ namespace BlogSystem.Repository
             try
             {
                 (Rating, string) result = new();
-                var Drating = await _context.rating.FindAsync(rating.id);
+                //var Drating = await _context.rating.FindAsync(rating.id);
+                var Drating=await _context.rating.Where(rt=>rt.user.userName == username&& rt.blog.id==blogid).FirstOrDefaultAsync();
                 if (Drating == null)
                 {
                     User user = await _context.users.Where(us => us.userName == username).FirstOrDefaultAsync();
@@ -61,6 +64,22 @@ namespace BlogSystem.Repository
                     result = (Drating, "Rating updated successfully.");
                 }
                 return result;
+            }
+            catch(Exception ex)
+            {
+                return (null,ex.Message);
+            }
+        }
+
+        public async Task<(Rating, string)> getRatingWithUser(int blogid, string username)
+        {
+            try
+            {
+                //(Rating, string) result = new();
+                var result = await _context.rating.Where(rat => rat.blog.id == blogid && rat.user.userName == username).FirstOrDefaultAsync();
+                if(result==null)return (new Rating(), "successfully fetched");
+                return (result, "successfully fetched...!");
+
             }
             catch(Exception ex)
             {

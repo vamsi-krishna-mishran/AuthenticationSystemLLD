@@ -28,11 +28,13 @@ function ViewBlog() {
         return <i>blog is loading...</i>
     }
     return (
-        <iframe className="pdf" 
+        <div className='pdf-container'>
+            <iframe className="pdf" 
                 src=
                 {blog}
             width="800" height="500">
         </iframe>
+        </div>
   )
 }
 
