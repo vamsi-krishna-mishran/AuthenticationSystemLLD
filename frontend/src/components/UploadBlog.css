@@ -1,0 +1,20 @@
+label[title="Title"],label[title="Thumbnail Image"],label[title="Upload Document"]{
+    font-size:4rem !important;
+    color:#b3b3b1 !important;
+
+}
+#validateOnly_name{
+    font-size:5rem !important;
+    border:none !important;
+    box-sizing:border-box !important;
+    border:3px solid white !important;
+}
+#validateOnly_name:hover{
+    border-bottom:3px solid red !important;
+}
+#uploadBtn:hover{
+    transform:scale(1.02);
+}
+.ant-upload:hover{
+    border-color:rgb(223,31,59) !important;
+}

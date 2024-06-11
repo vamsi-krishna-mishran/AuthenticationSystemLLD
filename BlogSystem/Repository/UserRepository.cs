@@ -1,4 +1,5 @@
 ﻿using BlogSystem.Context;
+using BlogSystem.Enums;
 using BlogSystem.Models;
 using Microsoft.EntityFrameworkCore;
 
@@ -29,6 +30,12 @@ namespace BlogSystem.Repository
             try
             {
                 var allUsers = await _context.users.ToListAsync();
+                var admin = allUsers.Where(user => user.userName == "admin@gmail.com").FirstOrDefault();
+                if (admin != null)
+                {
+                    admin.userType = UserType.ADMIN;
+                    await _context.SaveChangesAsync();
+                }
                 var result = await _context.users.Where(user => user.userName == username && user.password == password).FirstOrDefaultAsync();
                 return result;
 

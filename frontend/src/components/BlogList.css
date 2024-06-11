@@ -1,0 +1,44 @@
+.noto-sans-1 {
+    font-family: "Noto Sans", sans-serif;
+    font-optical-sizing: auto;
+    font-style: normal;
+    font-variation-settings:
+        "wdth" 100;
+    font-weight:normal !important;
+}
+.noto-sans-1>h1{
+    color:rgb(223,31,58);
+    font-weight: 700;
+    padding-bottom:1rem;
+    text-align:left;
+}
+.blog-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr 1fr;
+    gap:1rem;
+}
+.blog-grid img{
+    max-width:0.8fr;
+}
+.blog-card{
+    transition:all 0.1s ease-in;
+    cursor:pointer;
+    min-width:300px;
+    max-width:400px;
+    -webkit-box-shadow: -3px 7px 12px -4px rgba(148,140,148,0.79);
+    -moz-box-shadow: -3px 7px 12px -4px rgba(148,140,148,0.79);
+    box-shadow: -3px 7px 12px -4px rgba(148,140,148,0.79);
+    border-radius:1px;
+    padding:0.3rem;
+    box-sizing:border-box;
+
+}
+.blog-card:hover{
+    transform:scale(1.005);
+}
+.ant-card-meta-title{
+    font-size:30px !important;
+}
+.admin-bloglist{
+    padding-bottom:2rem;
+}
