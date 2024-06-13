@@ -11,7 +11,7 @@ import BlogProfile from './BlogProfile';
 function Profile()
 {
     const [profile, setProfile] = useState(null);
-    const [countt,setCountt]=useState(0);
+    const [countt, setCountt] = useState(0);
     // const apiCall = async () =>
     // {
     //     let call = await fetch(BaseURI + "api/User/getDetails", {
@@ -20,7 +20,7 @@ function Profile()
     //             'Accept': 'application/json',
     //             'Content-Type': 'application/json'
     //           },
-              
+
 
     //     })
     //     if (!call.ok)
@@ -36,17 +36,18 @@ function Profile()
         {
             try
             {
-                let apicall = await API('api/User/getDetails',{
+                let apicall = await API('api/User/getDetails', {
                     "credentials": "include",
                     headers: {
                         'Accept': 'application/json',
                         'Content-Type': 'application/json'
-                      }
+                    }
                 })
-                if(!apicall.ok){
+                if (!apicall.ok)
+                {
                     throw new Error(await apicall.text());
                 }
-                const userdetails=await apicall.json();
+                const userdetails = await apicall.json();
                 console.log(userdetails)
                 setProfile(userdetails)
                 //message.success(res)
@@ -61,11 +62,11 @@ function Profile()
     }, [countt])
 
     return (
-        <Watermark content={profile?.name??""}>
+        <Watermark content={profile?.name ?? ""}>
             <div className='blog-profile'>
-                    {profile&&<BlogProfile setCountt={setCountt} user={profile}/>}
-                    {/* <div>{profile ? profile : "loading user"}</div> */}
-                    <BlogStat/>
+                {profile && <BlogProfile setCountt={setCountt} user={profile} />}
+                {/* <div>{profile ? profile : "loading user"}</div> */}
+                <BlogStat />
             </div>
         </Watermark>
 
