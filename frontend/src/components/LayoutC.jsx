@@ -46,18 +46,18 @@ const LayoutC = () =>
     const items = [
         getItem('Profile', '2', <ProfileOutlined />),
         getItem('Blogs', '1', <FileOutlined />),
-    
+
         getItem('Rated Blogs', '3', <StarOutlined />)
         ,
         getItem('Logout', '5', <LogoutOutlined />)
-    
+
     ];
     const [component, setComponent] = useState(<BlogList />)
     const [admin, SetAdmin] = useState(true);
-    const {text,setText}=useContext(MyContext)
-    
-    text&&items.splice(3,0,getItem('Upload Blog', '4', <UploadOutlined />))
-    
+    const { text, setText } = useContext(MyContext)
+
+    text && items.splice(3, 0, getItem('Upload Blog', '4', <UploadOutlined />))
+
     const navigate = useNavigate()
     // const navigate = useNavigate();
     const [collapsed, setCollapsed] = useState(false);
@@ -69,7 +69,7 @@ const LayoutC = () =>
         const value = `; ${document.cookie}`;
         const parts = value.split(`; ${name}=`);
         if (parts.length === 2) return true;
-        return false;
+        return true;
     }
     const handleClick = async (event) =>
     {

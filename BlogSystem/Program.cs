@@ -42,7 +42,7 @@ namespace BlogSystem
                 options.AddPolicy(MyAllowSpecificOrigins,
             builder =>
             {
-                builder.WithOrigins("http://localhost:5173", "http://localhost:4173", "http://3.94.143.39")
+                builder.WithOrigins("http://localhost:5173", "https://blog-frontend-beta-red.vercel.app")
                        .AllowAnyHeader()
                        .AllowAnyMethod()
                        .AllowCredentials();
@@ -58,11 +58,11 @@ namespace BlogSystem
 
             builder.Services.AddScoped<IUserRepository, UserRepository>();
             builder.Services.AddScoped<IBlogRepository, BlogRepository>();
-            builder.Services.AddScoped<IRatingRepository,RatingRepository>();
+            builder.Services.AddScoped<IRatingRepository, RatingRepository>();
             builder.Services.AddAutoMapper(typeof(Program).Assembly);
 
             var app = builder.Build();
-            
+
             using (var context = new BlogDbContext())
             {
                 context.Database.EnsureCreated();
@@ -71,7 +71,7 @@ namespace BlogSystem
 
 
             // Configure the HTTP request pipeline.
-            if (!app.Environment.IsDevelopment())
+            ///if (!app.Environment.IsDevelopment())
             {
                 app.UseSwagger();
                 app.UseSwaggerUI();

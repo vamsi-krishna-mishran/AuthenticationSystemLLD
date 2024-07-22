@@ -2,11 +2,11 @@ import React from 'react'
 import { useState, useEffect } from 'react'
 import BaseURI from '../backendConfig'
 import { Divider, message } from 'antd';
-import BlogStat from './BlogStat';
-import './Profile.css'
+// import BlogStat from './BlogStat';
+// import './Profile.css'
 import { Watermark } from "antd";
 import API from '../API';
-import BlogProfile from './BlogProfile';
+// import BlogProfile from './BlogProfile';
 
 function Profile()
 {
@@ -64,9 +64,9 @@ function Profile()
     return (
         <Watermark content={profile?.name ?? ""}>
             <div className='blog-profile'>
-                {profile && <BlogProfile setCountt={setCountt} user={profile} />}
+                {/* {profile && <BlogProfile setCountt={setCountt} user={profile} />} */}
                 {/* <div>{profile ? profile : "loading user"}</div> */}
-                <BlogStat />
+                {/* <BlogStat /> */}
             </div>
         </Watermark>
 

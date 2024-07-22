@@ -1,6 +1,5 @@
 ﻿using BlogSystem.Context;
 using BlogSystem.Models;
-using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 
 namespace BlogSystem.Repository
